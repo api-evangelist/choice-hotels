@@ -1,0 +1,132 @@
+generated: '2026-07-28'
+method: probed
+source: live DNS/TLS/HTTP probes of apis.yml hosts (no OpenAPI servers[] exist for
+  this provider)
+hosts:
+- host: www.choicehotels.com
+  role: website
+  https: true
+  tls_version: TLSv1.3
+  cert_subject: CN=www.choicehotels.com, O=CHOICE HOTELS INTERNATIONAL, INC.
+  cert_expires: Nov  3 23:59:59 2026 GMT
+  cert_hostname_match: true
+  hsts: null
+  hsts_max_age: null
+  http_status: 000
+  note: Akamai edge terminates HTTP/2 with INTERNAL_ERROR and resets HTTP/1.1 for non-browser
+    clients, so response headers (including any HSTS) cannot be read by tooling. Bot
+    management, not an outage.
+- host: api.choicehotels.com
+  role: api-gateway
+  https: true
+  tls_version: TLSv1.3
+  cert_subject: CN=mashery.com
+  cert_expires: Oct  7 23:59:59 2026 GMT
+  cert_hostname_match: false
+  cert_finding: TLS hostname mismatch — the certificate presented for api.choicehotels.com
+    is the TIBCO Mashery certificate (CN=mashery.com, SANs cover *.mashery.com only,
+    no choicehotels.com SAN). Standard verifying clients fail the handshake with "no
+    alternative certificate subject name matches target host name". Verified 2026-07-28;
+    certificate issued 2026-03-23.
+  hsts: false
+  http_status: 596
+  http_note: 'With certificate verification disabled the gateway answers HTTP/1.1 596
+    with Server: Mashery Proxy and X-Mashery-Error-Code: ERR_596_SERVICE_NOT_FOUND
+    on every probed path — a live gateway with no publicly mapped service.'
+- host: developer.choicehotels.com
+  role: unprovisioned-developer-portal
+  https: true
+  tls_version: TLSv1.3
+  cert_subject: CN=mashery.com
+  cert_expires: Oct  7 23:59:59 2026 GMT
+  cert_hostname_match: false
+  cert_finding: Same Mashery certificate and same hostname mismatch as api.choicehotels.com.
+  hsts: false
+  http_status: 404
+- host: connect.choicehotels.com
+  role: franchisee-login
+  https: true
+  tls_version: TLSv1.3
+  cert_subject: CN=connect.choicehotels.com
+  cert_expires: Oct 25 04:12:18 2026 GMT
+  cert_hostname_match: true
+  hsts: true
+  hsts_max_age: 63072000
+  hsts_include_subdomains: true
+  http_status: 302
+- host: media.choicehotels.com
+  role: press-room
+  https: true
+  tls_version: TLSv1.2
+  cert_subject: CN=media.choicehotels.com
+  cert_expires: Oct  4 08:02:34 2026 GMT
+  cert_hostname_match: true
+  hsts: true
+  hsts_max_age: 31536000
+  hsts_include_subdomains: true
+  http_status: 200
+  note: Only host in the estate still negotiating TLS 1.2 rather than TLS 1.3.
+- host: investor.choicehotels.com
+  role: investor-relations
+  https: true
+  tls_version: TLSv1.3
+  cert_subject: CN=investor.choicehotels.com
+  cert_expires: Oct  2 12:17:34 2026 GMT
+  cert_hostname_match: true
+  hsts: true
+  hsts_max_age: 31536000
+  hsts_include_subdomains: true
+  hsts_preload: true
+  http_status: 403
+  note: 'Cloudflare challenge (cf-mitigated: challenge) on the document root for automated
+    clients.'
+- host: www.choicehotelsdevelopment.com
+  role: franchise-development-site
+  https: true
+  tls_version: TLSv1.3
+  cert_subject: CN=www.choicehotelsdevelopment.com
+  cert_expires: Sep 29 10:40:38 2026 GMT
+  cert_hostname_match: true
+  hsts: true
+  hsts_max_age: 63072000
+  hsts_include_subdomains: true
+  http_status: 200
+domains:
+- domain: choicehotels.com
+  dnssec: false
+  caa: []
+  spf: true
+  spf_record: v=spf1 include:_spf.choicehotels.com ~all
+  dmarc: true
+  dmarc_policy: none
+  dmarc_rua: mailto:dmarc@choicehotels.com
+  mta_sts: false
+- domain: choicehotelsdevelopment.com
+  dnssec: false
+  caa: []
+  spf: true
+  spf_record: v=spf1 include:_spf.sparkpostmail.com ip4:52.40.103.197 ~all
+  dmarc: true
+  dmarc_policy: none
+  mta_sts: false
+findings:
+- id: api-host-cert-mismatch
+  severity: notable
+  summary: api.choicehotels.com and developer.choicehotels.com both present the TIBCO
+    Mashery wildcard certificate (CN=mashery.com) with no choicehotels.com SAN, so
+    HTTPS to the API gateway fails certificate verification in any standard client.
+- id: no-caa
+  severity: informational
+  summary: Neither registrable domain publishes CAA records, so no certificate authority
+    is constrained from issuing for these names.
+- id: no-dnssec
+  severity: informational
+  summary: Neither registrable domain is DNSSEC-signed.
+- id: dmarc-monitor-only
+  severity: informational
+  summary: Both domains publish DMARC at p=none (monitor only) — no quarantine or
+    reject enforcement.
+- id: no-hsts-on-api-hosts
+  severity: informational
+  summary: The Mashery-fronted api. and developer. hosts return no Strict-Transport-Security
+    header; every non-Mashery host in the estate does send HSTS with includeSubDomains.

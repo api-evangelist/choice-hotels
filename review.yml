@@ -394,3 +394,61 @@ actions:
   imageNote: apis.yml image follows the network icon convention
     (icons/choice-hotels.png) and is pending the icon backfill pipeline; no brand
     icon was harvested because www.choicehotels.com is unreachable to tooling.
+enrichmentRounds:
+- date: '2026-07-28'
+  round: 2
+  method: search + probe
+  summary: |
+    Round 2 re-ran contract discovery against every host and found no machine-readable
+    contract, confirming round 1. It did surface one genuinely new public artifact the
+    first pass missed — Choice Hotels International publishes a real Responsible
+    Disclosure / Vulnerability Disclosure Policy at
+    https://www.choicehotels.com/legal/responsible-disclosure. Round 1 could not see it
+    because the Akamai edge blocks non-browser clients on www.choicehotels.com; it was
+    recovered via the Internet Archive capture of 2026-07-09 and corroborated by search.
+    The policy names responsibledisclosure@choicehotels.com, commits to a five-business-day
+    acknowledgement, offers good-faith safe harbour, explicitly declines to run a bug
+    bounty, and lists four out-of-scope classes. It is not machine-discoverable — no
+    /.well-known/security.txt is served anywhere on the estate.
+    Terms of Use and Privacy Policy were likewise confirmed to exist as real published
+    pages (both archived 200 on 2026-07-09) and are now wired into apis.yml.
+  newFindings:
+  - id: responsible-disclosure-policy
+    finding: Public VDP published as an HTML legal page; email intake; five-business-day
+      acknowledgement; safe harbour; no bug bounty; no security.txt.
+    artifact: security/choice-hotels-vulnerability-disclosure.yml
+  - id: api-host-tls-hostname-mismatch
+    finding: 'api.choicehotels.com and developer.choicehotels.com present the TIBCO
+      Mashery certificate (CN=mashery.com, SANs *.mashery.com only) with no choicehotels.com
+      SAN. Verifying clients cannot complete the handshake at all: curl reports "no
+      alternative certificate subject name matches target host name". The 596
+      ERR_596_SERVICE_NOT_FOUND behaviour recorded in round 1 is only observable with
+      certificate verification disabled.'
+    artifact: security/choice-hotels-domain-security.yml
+  - id: no-well-known-surface
+    finding: No security.txt, openid-configuration, oauth-authorization-server, api-catalog
+      or ai-plugin.json on any host. investor.choicehotels.com/.well-known/security.txt
+      returns 200 but is a text/html "Invalid key" catch-all, not RFC 9116 — recorded
+      as a false positive, not saved.
+    artifact: well-known/choice-hotels-well-known.yml
+  - id: dns-email-posture
+    finding: Neither choicehotels.com nor choicehotelsdevelopment.com is DNSSEC-signed
+      or publishes CAA. Both publish SPF and DMARC, but DMARC is p=none (monitor only).
+    artifact: security/choice-hotels-domain-security.yml
+  - id: no-trust-center-no-status-page
+    finding: trust., security. and status. subdomains do not resolve to any service.
+      No SOC 2, ISO 27001, PCI DSS, HIPAA or FedRAMP claim appears on any reachable
+      Choice property, so no Compliance or TrustCenter pointer was emitted.
+  - id: skytouch-still-closed
+    finding: developer.skytouchtechnology.com and api.skytouchtechnology.com still return
+      403 at the root and 404 on /openapi.json, /swagger.json, /api-docs and /docs.
+      skytouchtechnology.com/llms.txt and /.well-known/security.txt both 404.
+  artifactsNotProduced:
+    reason: |
+      packages, mcp, tool-crosswalk, overlays, grpc, conformance, errors, lifecycle,
+      scopes, authentication, sandbox, conventions, changelog, cli, components,
+      data-model, decline-codes, asyncapi, skills, agentic-access and arazzo were all
+      skipped. Every one of them derives from a machine-readable contract or a published
+      developer surface, and Choice Hotels has neither. Producing any of them here would
+      require inventing the API. No WellKnown or SecurityTxt pointer was wired either,
+      because the probe found no document to point at.

@@ -1,0 +1,57 @@
+# Choice Hotels
+
+> Choice Hotels International (NYSE: CHH) is a United States hotel franchisor headquartered in North Bethesda, Maryland, operating 7,575 hotels with 656,825 rooms across 49 states, the District of Columbia and 50 countries and territories as of December 31, 2025. Choice publishes **no public API, no developer portal, and no machine-readable API contract**. Everything below is the public, verifiable surface — plus an honest record of what does not exist.
+
+## API posture
+
+- Public developer portal: **none**. `developer.choicehotels.com` is a hostname pointed at TIBCO Mashery with no provisioned portal — it returns HTTP 404 under a `CN=mashery.com` certificate that does not match the hostname.
+- Public API reference: **none**.
+- Machine-readable contract: **none**. No OpenAPI, Swagger, WSDL, XSD, GraphQL SDL, AsyncAPI, MCP server, or Postman collection exists on any reachable Choice Hotels property.
+- API gateway: **live but unmapped**. `api.choicehotels.com` runs TIBCO Mashery (Boomi Cloud API Management) and answers every probed path with HTTP 596 / `X-Mashery-Error-Code: ERR_596_SERVICE_NOT_FOUND`.
+- Access model: **commercial agreement only**. Franchisees reach the systems through a franchise agreement; technology vendors through the SkyTouch `/CONNECT` interface program; distributors through an existing GDS, OTA or bed-bank relationship.
+
+## Named systems (from SEC filings — systems, not published APIs)
+
+- **choiceEDGE** — cloud central reservation / global reservation system that manages all distribution: rate, inventory, availability, shopping, booking and reservations for ChoiceHotels.com, the mobile apps, the GDSs (Sabre, Amadeus), the OTAs (Expedia, Booking.com) and metasearch (Kayak, Tripadvisor). Proprietary; no public contract.
+- **choiceADVANTAGE** — proprietary property and yield management system used by the significant majority of Choice hotels. Third-party integration is via the SkyTouch `/CONNECT` certified interface catalog, entry to which is a vendor request form.
+- **Choice Privileges** — loyalty program. No public member or points API is documented.
+
+## Brands
+
+Comfort, Quality, Clarion, Sleep Inn, Econo Lodge, Rodeway Inn, MainStay Suites, Suburban Studios, WoodSpring Suites, Everhome Suites, Cambria Hotels, Ascend Hotel Collection, and the Radisson Americas brands.
+
+## Public properties
+
+- [Website](https://www.choicehotels.com/): consumer booking site (Akamai bot management blocks non-browser clients)
+- [Help Center](https://www.choicehotels.com/help): guest support
+- [Franchise development](https://www.choicehotelsdevelopment.com/): franchise sales and development marketing
+- [Press room](https://media.choicehotels.com/press-releases): press releases; RSS at `https://media.choicehotels.com/press-releases?pagetemplate=rss`
+- [Investor relations](https://investor.choicehotels.com/): SEC filings are the reliable primary source for system and contract facts
+- [Wikipedia](https://en.wikipedia.org/wiki/Choice_Hotels): corroborating background
+
+## Security and legal
+
+- [Responsible Disclosure / Vulnerability Disclosure Policy](https://www.choicehotels.com/legal/responsible-disclosure): report to `responsibledisclosure@choicehotels.com`; acknowledgement within five business days; safe harbour for good-faith research; **no bug bounty**; social engineering, resource exhaustion, physical testing and denial of service are out of scope
+- [Privacy Policy](https://www.choicehotels.com/legal/privacy-policy): includes CCPA disclosures for California residents
+- [Terms of Use](https://www.choicehotels.com/legal/terms-of-use)
+- No `/.well-known/security.txt` is served on any host, so the disclosure channel is not machine-discoverable
+- No trust center, no published certifications (no SOC 2 / ISO 27001 / PCI DSS claim found), no status page
+
+## Gated channels (not developer surfaces)
+
+- [Choice Connect](https://connect.choicehotels.com/): Salesforce Experience Cloud franchisee community, login required
+- [Choice Central](https://apps.choicecentral.com/ccweb/content/home.html): franchisee operations portal
+- [SkyTouch /CONNECT](https://skytouchtechnology.com/software-solutions/connect/): the only public description of choiceADVANTAGE integration — marketing prose, no endpoints, no spec, no standard named
+- [choiceADVANTAGE certified interfaces](https://skytouchtechnology.com/choiceadvantage/availableinterfaces/): the curated partner catalog (locks, energy, guest experience, messaging, housekeeping, POS, TV)
+
+## API Evangelist artifacts
+
+- [apis.yml](https://raw.githubusercontent.com/api-evangelist/choice-hotels/refs/heads/main/apis.yml): APIs.json index for this provider
+- [review.yml](https://raw.githubusercontent.com/api-evangelist/choice-hotels/refs/heads/main/review.yml): full switching-cost review with every probe and its HTTP status
+- [security/choice-hotels-vulnerability-disclosure.yml](https://raw.githubusercontent.com/api-evangelist/choice-hotels/refs/heads/main/security/choice-hotels-vulnerability-disclosure.yml): the disclosure policy, captured
+- [security/choice-hotels-domain-security.yml](https://raw.githubusercontent.com/api-evangelist/choice-hotels/refs/heads/main/security/choice-hotels-domain-security.yml): TLS / HSTS / DNSSEC / CAA / SPF / DMARC probe across the estate
+- [well-known/choice-hotels-well-known.yml](https://raw.githubusercontent.com/api-evangelist/choice-hotels/refs/heads/main/well-known/choice-hotels-well-known.yml): the `/.well-known/` probe table (all misses, recorded)
+
+## Notes for agents
+
+There is nothing here to call. Do not construct requests against `api.choicehotels.com` — no public service is mapped to it and its certificate does not match its hostname. Choice-branded room inventory is reachable programmatically only through an intermediary that already holds a commercial relationship with Choice (a GDS, an OTA, or a bed bank), and those are separate providers with their own contracts.

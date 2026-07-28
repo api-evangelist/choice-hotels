@@ -1,0 +1,62 @@
+generated: '2026-07-28'
+method: searched
+source: live probes of every Choice Hotels host in apis.yml (no OpenAPI servers[]
+  exist for this provider)
+result: none-found
+summary: |
+  No /.well-known/ discovery document is served on any Choice Hotels host. No
+  security.txt (RFC 9116), no OpenID Connect discovery, no OAuth authorization
+  server metadata (RFC 8414), no api-catalog (RFC 9727), no ai-plugin.json.
+  Choice does publish a real Responsible Disclosure / Vulnerability Disclosure
+  Policy — but only as an HTML legal page at
+  https://www.choicehotels.com/legal/responsible-disclosure, with no security.txt
+  pointing at it, so the disclosure channel is not machine-discoverable. Captured
+  in security/choice-hotels-vulnerability-disclosure.yml.
+  No pointer of type WellKnown or SecurityTxt is wired into apis.yml, because
+  no such document exists to point at.
+documents: []
+probes:
+- host: https://api.choicehotels.com
+  note: 'TIBCO Mashery gateway. TLS certificate does not match the hostname (CN=mashery.com),
+    so verifying clients cannot connect at all; with verification disabled every path
+    returns 596 / X-Mashery-Error-Code: ERR_596_SERVICE_NOT_FOUND.'
+  results:
+  - {path: /.well-known/security.txt, status: 596}
+  - {path: /.well-known/openid-configuration, status: 596}
+  - {path: /.well-known/oauth-authorization-server, status: 596}
+  - {path: /.well-known/api-catalog, status: 596}
+  - {path: /.well-known/ai-plugin.json, status: 596}
+  - {path: /llms.txt, status: 596}
+- host: https://www.choicehotels.com
+  note: Akamai bot management terminates the connection for non-browser clients (HTTP/2
+    INTERNAL_ERROR), recorded as 000. Absence cannot be proven from the edge, but no
+    well-known document is referenced from any reachable Choice property or archive
+    capture.
+  results:
+  - {path: /.well-known/security.txt, status: 000}
+  - {path: /llms.txt, status: 000}
+- host: https://choicehotels.com
+  results:
+  - {path: /.well-known/security.txt, status: 301, note: redirects to www, then edge-blocked}
+- host: https://developer.choicehotels.com
+  note: Unprovisioned Mashery portal hostname; same mismatched CN=mashery.com certificate.
+  results:
+  - {path: /.well-known/security.txt, status: 403}
+  - {path: /llms.txt, status: 404}
+- host: https://media.choicehotels.com
+  results:
+  - {path: /.well-known/security.txt, status: 302}
+- host: https://investor.choicehotels.com
+  results:
+  - path: /.well-known/security.txt
+    status: 200
+    valid: false
+    note: 'False positive — the Cloudflare-fronted investor-relations application answers
+      200 with body "Invalid key" and content-type text/html; charset=utf-8. This is
+      the app''s catch-all handler, not an RFC 9116 security.txt. Not saved.'
+- host: https://skytouchtechnology.com
+  note: SkyTouch Technology operates the choiceADVANTAGE PMS and its /CONNECT interface
+    program; probed as the only adjacent integration surface.
+  results:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /llms.txt, status: 404}

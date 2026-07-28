@@ -44,16 +44,40 @@ Recorded in full in [`review.yml`](review.yml). In short:
 
 For a franchisee, leaving Choice means re-flagging a physical building; the technology estate is inseparable from the brand licence. For a technology vendor, the only way in is a certification queue Choice controls.
 
+## Security Posture
+
+Choice Hotels does publish one real, verifiable public program: a [Responsible Disclosure / Vulnerability Disclosure Policy](https://www.choicehotels.com/legal/responsible-disclosure). Reports go to `responsibledisclosure@choicehotels.com`, acknowledgement is committed within **five business days**, good-faith researchers are given safe harbour, and Choice states explicitly that it does **not** run a bug bounty. Social engineering, resource exhaustion, physical testing and denial of service are out of scope. Captured in [`security/choice-hotels-vulnerability-disclosure.yml`](security/choice-hotels-vulnerability-disclosure.yml).
+
+The policy is not machine-discoverable: no `/.well-known/security.txt` is served on any Choice host — see [`well-known/choice-hotels-well-known.yml`](well-known/choice-hotels-well-known.yml) for the full probe table.
+
+A domain-security probe of the whole estate is in [`security/choice-hotels-domain-security.yml`](security/choice-hotels-domain-security.yml). Notable finding: `api.choicehotels.com` and `developer.choicehotels.com` both present the TIBCO Mashery certificate (`CN=mashery.com`, SANs `*.mashery.com` only) with no `choicehotels.com` SAN, so a verifying HTTPS client cannot complete the handshake at all. Neither registrable domain is DNSSEC-signed or publishes CAA; both publish SPF and DMARC, but DMARC sits at `p=none`. No trust center, no published certifications, no status page.
+
+## Artifacts
+
+| Artifact | File | Method |
+| --- | --- | --- |
+| Vulnerability disclosure | [`security/choice-hotels-vulnerability-disclosure.yml`](security/choice-hotels-vulnerability-disclosure.yml) | searched |
+| Domain security | [`security/choice-hotels-domain-security.yml`](security/choice-hotels-domain-security.yml) | probed |
+| Well-known probe table | [`well-known/choice-hotels-well-known.yml`](well-known/choice-hotels-well-known.yml) | searched (none found) |
+| llms.txt | [`llms/choice-hotels-llms.txt`](llms/choice-hotels-llms.txt) | generated |
+
+No `openapi/`, `packages/`, `mcp/`, `scopes/`, `authentication/`, `errors/`, `conventions/`, `skills/` or `arazzo/` artifacts exist, and none were created. Every one of them derives from a machine-readable contract or a published developer surface, and Choice Hotels has neither.
+
 ## Common Properties
 
 - [Website](https://www.choicehotels.com/)
 - [Corporate Site](https://www.choicehotelsdevelopment.com/)
-- [Blog](https://media.choicehotels.com/press-releases)
+- [Blog](https://media.choicehotels.com/press-releases) — [RSS](https://media.choicehotels.com/press-releases?pagetemplate=rss)
 - [Investor Relations](https://investor.choicehotels.com/)
 - [LinkedIn](https://www.linkedin.com/company/choice-hotels-international/)
 - [Wikipedia](https://en.wikipedia.org/wiki/Choice_Hotels)
 - [Login — Choice Connect (franchisee)](https://connect.choicehotels.com/)
 - [Login — Choice Central (franchisee)](https://apps.choicecentral.com/ccweb/content/home.html)
+- [Support — Guest Help Center](https://www.choicehotels.com/help)
+- [Support — ChoiceNOW franchisee help portal](https://choicehotels.service-now.com/hp)
+- [Terms of Use](https://www.choicehotels.com/legal/terms-of-use)
+- [Privacy Policy](https://www.choicehotels.com/legal/privacy-policy)
+- [Responsible Disclosure Policy](https://www.choicehotels.com/legal/responsible-disclosure)
 
 ## Maintainers
 
