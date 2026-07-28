@@ -1,0 +1,396 @@
+aid: choice-hotels
+name: Choice Hotels
+review:
+  question: Does Choice Hotels International publish a public developer portal, API
+    reference, or machine-readable API contract, and what would it cost a customer
+    to leave?
+  answer: false
+  date: '2026-07-28'
+  reviewer: API Evangelist
+  tier: hotel-group
+  homeMarket: United States
+  specsHarvested: 0
+findings:
+  summary: |
+    Choice Hotels International (NYSE: CHH) publishes no public developer portal,
+    no API reference, and no machine-readable API contract. Infrastructure evidence
+    shows the company runs a TIBCO Mashery API management layer — api.choicehotels.com
+    answers every probed path with HTTP 596 / X-Mashery-Error-Code:
+    ERR_596_SERVICE_NOT_FOUND, and developer.choicehotels.com answers 404 from a
+    Mashery Proxy under a wildcard *.mashery.com certificate (subject CN=mashery.com,
+    no choicehotels.com SAN), i.e. a hostname pointed at Mashery but with no
+    provisioned public portal. The Internet Archive shows developer.choicehotels.com
+    existed as early as 2012-03-15 and even its robots.txt returned HTTP 401,
+    meaning the developer surface has been credential-gated for well over a decade.
+    www.choicehotels.com itself could not be fetched by any tooling — the Akamai
+    edge terminates HTTP/2 with INTERNAL_ERROR and HTTP/1.1 with a connection
+    reset for non-browser clients (recorded as HTTP 000), so terms of use and
+    privacy policy text could not be read directly and no claims are made from them.
+    All real integration paths are gated commercial channels: connect.choicehotels.com
+    (Salesforce Experience Cloud franchisee community, HTTP 302 to /login),
+    apps.choicecentral.com (franchisee portal), and the SkyTouch Technology
+    /CONNECT interface program for the choiceADVANTAGE property management system,
+    whose own developer.skytouchtechnology.com and api.skytouchtechnology.com
+    hosts return HTTP 403.
+  publicDeveloperPortal: false
+  publicApiReference: false
+  machineReadableContract: false
+  apiGatewayDetected:
+    vendor: TIBCO Mashery (Boomi Cloud API Management)
+    host: api.choicehotels.com
+    evidence: 'HTTP 596 with header X-Mashery-Error-Code: ERR_596_SERVICE_NOT_FOUND
+      and Server: Mashery Proxy on every probed path'
+    publiclyMapped: false
+  productApiFamily:
+    note: |
+      Choice does not publish an API catalog, so the segmentation below is taken
+      from named systems described in the company's own SEC Form 10-K for fiscal
+      year 2025 and from partner press material. These are systems, not published
+      APIs — none has a public contract.
+    availabilityAndRates: choiceEDGE — "cloud-based software to manage all distribution
+      for the Company by optimizing rate, inventory, availability, shopping, booking,
+      and reservations for its website, mobile apps, and third-party distribution
+      partners" (Choice Hotels FY2025 Form 10-K).
+    bookingAndReservations: Central Reservation System (CRS) — "our toll-free telephone
+      reservation system, our proprietary internet sites, mobile phone and tablet
+      reservation applications, interfaces with global distribution systems" (FY2025
+      Form 10-K).
+    propertyOperations: choiceADVANTAGE — "our proprietary property and yield management
+      system that the significant majority of our hotels utilize" (FY2025 Form 10-K);
+      third-party integration is via the SkyTouch /CONNECT interface catalog.
+    loyalty: Choice Privileges — loyalty program named in the FY2025 Form 10-K; no
+      public member or points API is documented.
+    contentAndImagery: not published.
+    servicingAndChanges: not published.
+switchingCost:
+  interfaceShape:
+    value: none-published
+    standardNamed: no standard reference found
+    evidence: |
+      No public interface contract of any kind is published — no OpenAPI, no
+      Swagger, no WSDL, no XSD, no REST reference. No OpenTravel (OTA) message
+      set, HTNG specification, or HEDNA reference is cited on any reachable
+      Choice Hotels property. The choiceEDGE and choiceADVANTAGE systems are
+      described in the FY2025 Form 10-K as "proprietary". Where Choice reaches
+      the market through third parties (Sabre, Amadeus, Expedia, Booking.com)
+      the wire format is those intermediaries' own — Choice is a participant in
+      their standards, not the publisher of one. Because nothing is published,
+      an integrator cannot even evaluate portability before signing.
+  secondSource:
+    value: no-alternative
+    alternativesConsidered: |
+      For Choice-branded room inventory there is no second source: only Choice's
+      CRS sells Comfort, Quality, Clarion, Sleep Inn, Cambria, WoodSpring,
+      Everhome, MainStay, Suburban Studios, Ascend and the Radisson Americas
+      brands. A reseller can reach that same inventory indirectly through the
+      GDSs (Sabre, Amadeus, Travelport), the OTAs (Expedia, Booking.com) or bed
+      banks (Hotelbeds), but every one of those routes is a re-intermediation of
+      Choice, not a substitute for it — the rate and availability still originate
+      in choiceEDGE. For a franchisee, the second source is a different flag
+      entirely (Marriott, Hilton, Wyndham, IHG, Best Western), which means
+      re-branding the physical asset, not swapping an interface. For a PMS vendor
+      wanting shelf space at Choice properties, the alternatives are the systems
+      Choice itself sanctions — choiceADVANTAGE via SkyTouch, and Mews for
+      international franchisees — a certification queue rather than an open market.
+  exitPath:
+    value: no-export-published
+    operationCited: none
+    evidence: |
+      No export, dump, bulk, reporting, or data-portability operation is published
+      anywhere, because no API surface is published. Choice's consumer privacy
+      policy and CCPA/CPRA rights disclosures could not be read: every request to
+      www.choicehotels.com from non-browser tooling was terminated by the Akamai
+      edge (HTTP 000), so no data-portability commitment is asserted here either
+      way. A franchisee's operating data lives inside choiceADVANTAGE and
+      choiceEDGE, both proprietary and both terminated with the franchise
+      agreement; no published mechanism describes extracting reservation history,
+      guest records, or rate history on exit.
+  identifierPortability:
+    value: GDS hotel chain codes and per-property GDS/OTA property IDs are portable
+      industry keys; Choice Privileges member numbers, choiceEDGE reservation
+      confirmation numbers and choiceADVANTAGE property IDs are vendor-internal
+      and do not travel
+    evidence: |
+      Choice reaches Sabre and Amadeus (named in the FY2025 Form 10-K) which means
+      its brands carry two-letter GDS chain codes and per-property GDS codes —
+      genuinely shared industry identifiers that survive a switch of intermediary.
+      Comfort Inn's chain code CI is the one code corroborated in public GDS code
+      listings; no complete Choice chain-code table is published by Choice itself,
+      so no further codes are asserted. Everything guest-facing and
+      operations-facing — Choice Privileges membership numbers, confirmation
+      numbers, and internal property identifiers — is opaque and Choice-specific.
+      No PNR record locator, IATA/ARC agency number, or GIATA ID is published by
+      Choice; hotel groups do not issue those.
+  contractualLockIn:
+    published: partial
+    verbatim:
+    - quote: These agreements may be terminated, renegotiated or expire but typically
+        have an initial term of between 10 and 30 years.
+      source: Choice Hotels International, Inc. Form 10-K for the fiscal year ended
+        December 31, 2025, Risk Factors
+    - quote: These agreements also typically contain provisions permitting either
+        party to terminate the franchise agreement upon designated anniversaries of
+        the agreement under certain circumstances and depending on the particular
+        hotel brand that is licensed to the franchisee.
+      source: Choice Hotels International, Inc. Form 10-K for the fiscal year ended
+        December 31, 2025, Risk Factors
+    - quote: The franchise agreements typically contain liquidated damages provisions
+        addressing franchisee termination at intervals other than those specified
+        in the agreement which represent a fair and reasonable measure of damages
+        that both parties agree should be paid to us.
+      source: Choice Hotels International, Inc. Form 10-K for the fiscal year ended
+        December 31, 2025, Item 1 Business
+    - quote: We are required by our franchise agreements to use the marketing and
+        reservation fees we collect for system-wide marketing and reservation activities.
+      source: Choice Hotels International, Inc. Form 10-K for the fiscal year ended
+        December 31, 2025, MD&A
+    - quote: In exchange for a non-refundable fee, developers are provided geographic
+        exclusivity to enter into a specified number of franchise agreements.
+      source: Choice Hotels International, Inc. Form 10-K for the fiscal year ended
+        December 31, 2025, Item 1 Business (master development agreements for WoodSpring
+        Suites and Everhome Suites)
+    - quote: /CONNECT Integrations are cloud-based. There is no one-time setup fee.
+      source: SkyTouch Technology, choiceADVANTAGE Available Interfaces page (HTTP
+        200, fetched 2026-07-28)
+    notPublished: |
+      No API terms of service, developer agreement, rate-limit policy, data-use
+      policy, or partner API contract is published by Choice Hotels. Franchise
+      Disclosure Document terms (royalty rates, marketing and reservation fee
+      percentages, technology fees, per-reservation charges) are not published on
+      any reachable Choice property and are not asserted here. The reservation-fee
+      structure is confirmed to exist by the 10-K language above but its amounts
+      and exit terms are not public.
+    summary: 10-to-30-year franchise agreements with liquidated damages on early
+      termination; nothing published about API or data terms
+  accessGate:
+    value: commercial-agreement
+    whatADeveloperMustSign: |
+      There is no self-serve path of any kind. A hotel owner must execute a Choice
+      Hotels franchise agreement (initial term typically 10-30 years, liquidated
+      damages on early termination) before reaching choiceEDGE or choiceADVANTAGE
+      at all. A technology vendor must be admitted to the SkyTouch /CONNECT
+      interface program for choiceADVANTAGE — the public entry point is a vendor
+      request form that warns "due to an increase in vendor requests, our response
+      times will be significantly delayed" — or be selected by Choice as a
+      sanctioned PMS (as Mews was for international franchisees). A distributor
+      reaches Choice inventory only through an existing GDS, OTA, or bed-bank
+      commercial relationship. The only unauthenticated commercial program found
+      is a consumer referral affiliate program at choicehotels.com/affiliate
+      (unreachable to tooling, HTTP 000), which is a link-and-commission program,
+      not API access.
+  distributionModel:
+    value: gds-intermediated
+    evidence: |
+      Choice is a supply-side franchisor that publishes its own inventory through
+      every major intermediary. Verbatim from the FY2025 Form 10-K: "Our central
+      reservations system is a critical technology used to deliver guests to our
+      franchisees through multiple channels, including our call centers,
+      proprietary web and mobile sites, global distribution systems (e.g., SABRE,
+      Amadeus), online travel agents ('OTAs') (e.g., Expedia, Booking.com), and
+      internet referral or booking services (e.g., Kayak, Tripadvisor)." Direct
+      booking through ChoiceHotels.com and the Choice Privileges app is the
+      company's counter-strategy to that intermediation, but the 10-K also states
+      Choice is connected "with many, but not all, of the major online
+      third-party booking sites" — the GDS and OTA channels are structural, not
+      optional.
+    ndcPosture: not applicable — IATA NDC is an airline distribution standard and
+      Choice Hotels is a hotel franchisor; no NDC certification, endpoint, or
+      reference exists or would be expected.
+    channelManagerPosture: |
+      choiceEDGE is itself the channel layer for the Choice system — the 10-K
+      describes it as managing "all distribution for the Company." Franchisees do
+      not select their own channel manager; connectivity to OTAs, GDSs and PMSs is
+      pre-configured by Choice. This is the hotel-group inversion of the channel
+      manager lock-in described for independent hotels: the franchisee cannot
+      leave the channel without leaving the brand.
+  netAssessment: |
+    Choice Hotels is a maximum-lock-in, zero-public-contract profile. There is
+    nothing to integrate against without a commercial agreement, nothing published
+    to evaluate before signing, and no documented way to get data back out. The
+    binding instrument is not an API contract but a 10-to-30-year franchise
+    agreement with liquidated damages, and the technical estate (choiceEDGE CRS,
+    choiceADVANTAGE PMS) is proprietary and inseparable from the brand licence.
+    For a franchisee, leaving means re-flagging a physical building. For a
+    technology vendor, the only route in is a certification queue Choice controls.
+    For a distributor, Choice is reachable only through the GDSs and OTAs that
+    already intermediate it. The Kin Score cannot currently see any of this,
+    because every dimension it measures — spec presence, documentation,
+    onboarding, rate limits — is simply absent, which is itself the finding.
+probes:
+  date: '2026-07-28'
+  userAgent: Chrome 126 desktop UA over HTTP/1.1 and HTTP/2
+  results:
+  - url: https://www.choicehotels.com/
+    status: 000
+    note: Akamai edge terminates HTTP/2 stream with INTERNAL_ERROR and resets HTTP/1.1
+      for non-browser clients; DNS resolves 23.33.40.81; TLS cert subject O=CHOICE
+      HOTELS INTERNATIONAL, INC., CN=www.choicehotels.com. Bot management, not an
+      outage.
+  - url: https://choicehotels.com/
+    status: 301
+    note: Redirects to https://www.choicehotels.com/ then blocked as above.
+  - url: https://developer.choicehotels.com/
+    status: 404
+    note: 'Server: Mashery Proxy. TLS cert subject CN=mashery.com with SANs for
+      *.mashery.com only — no choicehotels.com SAN, so HTTPS is served under a
+      mismatched certificate. Unprovisioned Mashery portal hostname.'
+  - url: http://developer.choicehotels.com/
+    status: 301
+    note: 'Server: awselb/2.0, redirects to https://developer.choicehotels.com:443/'
+  - url: https://developer.choicehotels.com/docs
+    status: 404
+  - url: https://developer.choicehotels.com/io-docs
+    status: 404
+  - url: https://developer.choicehotels.com/apis
+    status: 404
+  - url: https://developer.choicehotels.com/member/register
+    status: 404
+  - url: https://developer.choicehotels.com/member/login
+    status: 404
+  - url: https://developer.choicehotels.com/openapi.json
+    status: 404
+  - url: https://developer.choicehotels.com/swagger.json
+    status: 404
+  - url: https://developer.choicehotels.com/api-docs
+    status: 404
+  - url: https://developer.choicehotels.com/.well-known/security.txt
+    status: 403
+  - url: https://api.choicehotels.com/
+    status: 596
+    note: 'X-Mashery-Error-Code: ERR_596_SERVICE_NOT_FOUND, Server: Mashery Proxy.
+      Live Mashery gateway, no publicly mapped service. DNS 54.226.35.207 (AWS).'
+  - url: https://api.choicehotels.com/v1
+    status: 596
+  - url: https://api.choicehotels.com/v1/hotels
+    status: 596
+  - url: https://api.choicehotels.com/hotels
+    status: 596
+  - url: https://api.choicehotels.com/openapi.json
+    status: 596
+  - url: https://api.choicehotels.com/swagger.json
+    status: 596
+  - url: https://api.choicehotels.com/api-docs
+    status: 596
+  - url: https://api.choicehotels.com/docs
+    status: 596
+  - url: https://api.choicehotels.com/.well-known/openapi
+    status: 596
+  - url: https://developers.choicehotels.com/
+    status: 000
+    note: Resolves to Akamai 23.54.218.24 (wildcard); no TLS service answers.
+  - url: https://docs.choicehotels.com/
+    status: 000
+    note: Same Akamai wildcard address; no service.
+  - url: https://apis.choicehotels.com/
+    status: 000
+    note: Same Akamai wildcard address; no service.
+  - url: https://partners.choicehotels.com/
+    status: 000
+    note: Same Akamai wildcard address; no service.
+  - url: https://connect.choicehotels.com/
+    status: 302
+    note: Redirects to /login?ec=302 — Salesforce Experience Cloud community
+      (CSP references choicehotelsfranchise.file.force.com and
+      hotelreporting.choicecentral.com). Franchisee login, behind Cloudflare. Not
+      a developer portal.
+  - url: https://choicecentral.com/
+    status: 302
+    note: Redirects to https://apps.choicecentral.com/ccweb/content/home.html — the
+      franchisee operations portal.
+  - url: https://media.choicehotels.com/press-releases
+    status: 200
+    note: Public press room; usable as a Blog/news source.
+  - url: https://investor.choicehotels.com/
+    status: 301
+    note: Investor relations, reachable; SEC filings are the reliable primary source.
+  - url: https://www.choicehotelsdevelopment.com/
+    status: 200
+    note: Franchise development marketing site; no API or developer content.
+  - url: https://choicehotels.service-now.com/hp
+    status: 200
+    note: ChoiceNOW ServiceNow help portal for franchisees; support desk, not an API.
+  - url: https://www.choicehotels.com/affiliate
+    status: 000
+    note: Consumer referral affiliate program page, blocked by the same Akamai edge.
+      Commission-based link program, not API access.
+  - url: https://skytouchtechnology.com/software-solutions/connect/
+    status: 200
+    note: SkyTouch /CONNECT described only in marketing prose — "an Application
+      Program Interface (API) that allows your application or technology platform
+      to connect with the SkyTouch Hotel Operations Platform." No endpoints, no
+      spec, no standard named. Entry is a vendor request form.
+  - url: https://skytouchtechnology.com/choiceadvantage/availableinterfaces/
+    status: 200
+    note: Certified choiceADVANTAGE interface catalog — locks (Assa Abloy VisionLine,
+      dormakaba Ambiance, Onity OnPortal), energy, guest experience (Canary,
+      Sojern), messaging (Ivy by Revinate, Medallia Concierge), internet,
+      housekeeping (Quore, WrkSpot, MOP by Visual Matrix), OTA reconciliation, POS
+      (Toast), retail POS (Impulsify), telephone, TV. No HTNG or OpenTravel
+      reference.
+  - url: https://developer.skytouchtechnology.com/
+    status: 403
+    note: 'Server: Apache. Exists, fully forbidden to the public.'
+  - url: https://api.skytouchtechnology.com/
+    status: 403
+  - url: https://api.github.com/orgs/ChoiceHotelsInternational
+    status: 200
+    note: GitHub organization "Choice Hotels International" created 2017-01-06 with
+      0 public repositories. Ownership not independently verified; not listed in
+      apis.yml.
+  - url: https://api.github.com/orgs/ChoiceHotels
+    status: 200
+    note: NOT the subject company — this org is "Choice Hotels Limited", Blackpool,
+      choicehotels.co.uk, 5 public CakePHP repos. Deliberately excluded.
+  - url: http://web.archive.org/cdx/search/cdx?url=developer.choicehotels.com*
+    status: 200
+    note: 'Single archived record: 20120315214814
+      http://developer.choicehotels.com:80/robots.txt statuscode 401 — the developer
+      hostname has existed since at least March 2012 and was already returning 401
+      on robots.txt, i.e. credential-gated for over a decade.'
+  - url: https://data.sec.gov/submissions/CIK0001046311.json
+    status: 200
+    note: CHOICE HOTELS INTERNATIONAL INC /DE, ticker CHH, SIC "Hotels & Motels".
+      Latest Form 10-K filed 2026-02-19, accession 0001046311-26-000008.
+  - url: https://www.sec.gov/Archives/edgar/data/1046311/000104631126000008/chh-20251231.htm
+    status: 200
+    note: FY2025 Form 10-K, 2,695,323 bytes. Primary source for every quoted
+      statement in this file.
+sources:
+- url: https://www.sec.gov/Archives/edgar/data/1046311/000104631126000008/chh-20251231.htm
+  type: RegulatoryFiling
+  note: Choice Hotels International, Inc. Form 10-K for fiscal year ended December
+    31, 2025. Source for scale (7,575 hotels / 656,825 rooms), brand list, HQ (915
+    Meeting Street, Suite 600, North Bethesda, Maryland 20852), choiceEDGE,
+    choiceADVANTAGE, CRS channel list, franchise term and liquidated damages
+    language.
+- url: https://skytouchtechnology.com/software-solutions/connect/
+  type: Documentation
+  note: SkyTouch /CONNECT marketing page. Only public description of the
+    choiceADVANTAGE integration interface; no technical contract.
+- url: https://skytouchtechnology.com/choiceadvantage/availableinterfaces/
+  type: Documentation
+  note: Certified interface catalog for choiceADVANTAGE; evidence that PMS
+    integration is a curated, Choice-controlled list.
+- url: https://connect.choicehotels.com/
+  type: Login
+  note: Salesforce Experience Cloud franchisee community; gated.
+- url: https://media.choicehotels.com/press-releases
+  type: Blog
+  note: Public press room.
+- url: https://en.wikipedia.org/wiki/Choice_Hotels
+  type: Wikipedia
+  note: Corroborating company background only.
+actions:
+  apisYmlCreated: true
+  readmeCreated: true
+  openapiDirectory: false
+  specsHarvested: 0
+  reason: |
+    No OpenAPI, Swagger, RAML, WSDL, XSD, Postman collection, or any other
+    machine-readable contract exists on any reachable Choice Hotels property.
+    Nothing was saved to openapi/ because nothing real was found, and no
+    directory was created rather than leave an empty one. apis[] is empty and
+    correct: listing an API here would require inventing one.
+  imageNote: apis.yml image follows the network icon convention
+    (icons/choice-hotels.png) and is pending the icon backfill pipeline; no brand
+    icon was harvested because www.choicehotels.com is unreachable to tooling.

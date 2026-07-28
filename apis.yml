@@ -1,0 +1,71 @@
+aid: choice-hotels
+url: https://raw.githubusercontent.com/api-evangelist/choice-hotels/refs/heads/main/apis.yml
+name: Choice Hotels
+kind: company
+description: >-
+  Choice Hotels International (NYSE: CHH) is a United States hotel franchisor
+  headquartered in North Bethesda, Maryland, operating 7,575 hotels with 656,825 rooms
+  open across 49 states, the District of Columbia and 50 countries and territories
+  as of December 31, 2025. Its brands include Comfort, Quality, Clarion, Sleep Inn,
+  Econo Lodge, Rodeway Inn, MainStay Suites, Suburban Studios, WoodSpring Suites,
+  Everhome Suites, Cambria Hotels, Ascend Hotel Collection and the Radisson Americas
+  brands. Choice sits on the supply side of the travel distribution chain as a franchisor
+  rather than an owner: its proprietary choiceEDGE central reservation system pushes
+  rate, inventory and availability to ChoiceHotels.com, the Choice Privileges mobile
+  apps, the global distribution systems (Sabre, Amadeus), the OTAs (Expedia, Booking.com)
+  and metasearch (Kayak, Tripadvisor), while its proprietary choiceADVANTAGE property
+  management system runs the majority of its franchised properties. API posture is
+  honestly none-published — no public developer portal, no published API reference,
+  no machine-readable contract, and no exit path. A TIBCO Mashery API gateway answers
+  at api.choicehotels.com but every probed path returns ERR_596_SERVICE_NOT_FOUND,
+  and developer.choicehotels.com is an unprovisioned Mashery CNAME returning 404
+  under a mashery.com certificate. All real integration is reached through gated
+  franchisee and vendor channels (connect.choicehotels.com, choicecentral.com, the
+  SkyTouch /CONNECT interface program) that require a commercial agreement.
+accessModel:
+  pricing: unknown
+  onboarding: unknown
+  trial: false
+  try_now: false
+  public: false
+  label: No public developer program
+  confidence: high
+  source:
+  - probe
+  generated: '2026-07-28'
+  method: manual
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/choice-hotels.png
+tags:
+- Travel
+- United States
+- Hospitality
+- Hotels
+- Booking
+- Reservations
+- Distribution
+- Franchising
+- Loyalty
+created: '2026-07-28'
+modified: '2026-07-28'
+specificationVersion: '0.19'
+apis: []
+common:
+- type: Website
+  url: https://www.choicehotels.com/
+- type: CorporateSite
+  url: https://www.choicehotelsdevelopment.com/
+- type: Blog
+  url: https://media.choicehotels.com/press-releases
+- type: InvestorRelations
+  url: https://investor.choicehotels.com/
+- type: LinkedIn
+  url: https://www.linkedin.com/company/choice-hotels-international/
+- type: Wikipedia
+  url: https://en.wikipedia.org/wiki/Choice_Hotels
+- type: Login
+  url: https://connect.choicehotels.com/
+- type: Login
+  url: https://apps.choicecentral.com/ccweb/content/home.html
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com
