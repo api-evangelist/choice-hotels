@@ -1,0 +1,11 @@
+[
+  {
+    "repo": "choice-hotels",
+    "captured_at": "2026-10-11T184200",
+    "source_url": "https://www.choicehotels.com/",
+    "source_type": "Website",
+    "file": "choice-hotels-2026-10-11T184200.png",
+    "bytes": 24803,
+    "capture": "playwright-local"
+  }
+]
