@@ -3,6 +3,16 @@ method: searched
 checked:
 - https://integrations-api.siteminder.com/public/partners/all?lang=en
 - https://listings.pcisecuritystandards.org/assessors_and_solutions
+- https://apps.dfi.wi.gov/apps/FranchiseSearch/MainSearch.aspx
+- https://cards.web.commerce.state.mn.us/franchise-registrations
+- https://dfpi.ca.gov/regulated-industries/regulated-entities-list/
+- https://docqnet.dfpi.ca.gov/
+- https://pos.toasttab.com/franchise
+- https://squareup.com/us/en/franchises
+- https://www.franchise.org/franchise-opportunities/
+- https://www.franchise.org/suppliers/
+- https://www.franchise.org/wp-json/wp/v2/member
+- https://www.servicetitan.com/market/franchise-management-software
 source: https://integrations-api.siteminder.com/public/partners/all?lang=en
 edges:
 - partner_name: SiteMinder
@@ -51,3 +61,110 @@ edges:
     detected: '2026-10-20'
   detected_by: sweep-compliance-assurance.py
   first_seen: '2026-10-20'
+- partner_name: International Franchise Association member franchise brands
+  partner: null
+  partner_match: register
+  type: register
+  channel: standard-directory
+  relationship: standard-participant
+  direction: partner-built
+  evidence: https://www.franchise.org/franchise-opportunities/
+  category: franchise industry association franchisor member
+  contract_reference:
+    register: International Franchise Association member franchise brands
+    spec_file: null
+    standard: null
+    role: ifa-franchisor-member
+    registrations:
+    - registered_name: Choice Hotels International
+      licences:
+      - ifa-franchisor-member
+      register_country: null
+      matched_name: choice hotels
+      matched_domain: choicehotels.com
+      matched_by: domain
+      categories:
+      - hotels motels
+      - lodging
+      page: https://www.franchise.org/franchise-opportunities/choice-hotels-international/
+      identity: wikidata Q1075788 'Choice Hotels' P856 http://www.choicehotels.com
+    signal_note: 'participation only: listed in the IFA directory; no certification or API conformance'
+    detected_by: sweep-franchise-registries.py
+    detected: '2026-10-21'
+    identity_source: wikidata P856 (labelled provenance step; Kin 2026-10-15 decision 1)
+  detected_by: sweep-franchise-registries.py
+  first_seen: '2026-10-21'
+- partner_name: Minnesota Department of Commerce franchise registrations (CARDS)
+  partner: null
+  partner_match: register
+  type: register
+  channel: regulator-register
+  relationship: standard-participant
+  direction: partner-built
+  evidence: https://cards.web.commerce.state.mn.us/franchise-registrations
+  category: state franchise registration (FDD registered with the Minnesota Commissioner of Commerce)
+  contract_reference:
+    register: Minnesota Department of Commerce franchise registrations (CARDS)
+    spec_file: null
+    standard: null
+    role: registered-franchisor
+    registrations:
+    - registered_name: CHOICE HOTELS INTERNATIONAL, INC.
+      licences:
+      - registered franchisor (FDD registration order)
+      register_country: US
+      matched_name: choice hotels
+      matched_domain: choicehotels.com
+      matched_by: domain
+      brands:
+      - Cambria Hotels
+      - WOODSPRING SUITES
+      - ECONO LODGE
+      - EVERHOME SUITES
+      - MAINSTAY SUITES
+      - CLARION HOTEL
+      - ASCEND HOTEL COLLECTION
+      - Country Inn & Suites by Radisson
+      - COMFORT INN
+      - Park Inn
+      - Park Inn by Radisson
+      - Park Inn by Radisson Residences
+      - SUBURBAN STUDIOS
+      - SUBURBAN EXTENDED STAY HOTEL
+      - SUBURBAN
+      - RODEWAY INN
+      - SLEEP INN
+      - RADISSON INDIVIDUALS HOTEL
+      - Radisson
+      - QUALITY INN
+      - Radisson Blu
+      - Country Inn & Suites
+      - ASCEND COLLECTION HOTELS
+      file_numbers:
+      - '10698'
+      - '10719'
+      - '10720'
+      - '10721'
+      - '10722'
+      - '1673'
+      - '1799'
+      - '2691'
+      - '3269'
+      - '3576'
+      - '3577'
+      - '48'
+      - '5274'
+      - '5980'
+      - '8459'
+      - '9197'
+      - '9334'
+      latest_order: '2026-06-03'
+      latest_order_type: Order of Renewed Registration w Amendment
+      identity: wikidata Q1075788 'Choice Hotels' P856 http://www.choicehotels.com
+    signal_note: 'participation only: a state franchise registration order; no API conformance is published by this
+      register'
+    detected_by: sweep-franchise-registries.py
+    detected: '2026-10-21'
+    identity_source: wikidata P856 (labelled provenance step; Kin 2026-10-15 decision 1)
+  detected_by: sweep-franchise-registries.py
+  first_seen: '2026-10-21'

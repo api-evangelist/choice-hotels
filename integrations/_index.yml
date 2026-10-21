@@ -46,3 +46,110 @@
     detected: '2026-10-20'
   status: not-a-workflow
   arazzo: null
+- slug: choice-hotels-international-franchise-association-member-franchise-brands
+  label: International Franchise Association member franchise brands
+  partner_name: International Franchise Association member franchise brands
+  category: franchise industry association franchisor member
+  type: register
+  channel: standard-directory
+  evidence: https://www.franchise.org/franchise-opportunities/
+  source: edge
+  relationship: standard-participant
+  contract_reference:
+    register: International Franchise Association member franchise brands
+    spec_file: null
+    standard: null
+    role: ifa-franchisor-member
+    registrations:
+    - registered_name: Choice Hotels International
+      licences:
+      - ifa-franchisor-member
+      register_country: null
+      matched_name: choice hotels
+      matched_domain: choicehotels.com
+      matched_by: domain
+      categories:
+      - hotels motels
+      - lodging
+      page: https://www.franchise.org/franchise-opportunities/choice-hotels-international/
+      identity: wikidata Q1075788 'Choice Hotels' P856 http://www.choicehotels.com
+    signal_note: 'participation only: listed in the IFA directory; no certification or API conformance'
+    detected_by: sweep-franchise-registries.py
+    detected: '2026-10-21'
+    identity_source: wikidata P856 (labelled provenance step; Kin 2026-10-15 decision 1)
+  status: not-a-workflow
+  arazzo: null
+- slug: choice-hotels-minnesota-department-of-commerce-franchise-registrations-cards
+  label: Minnesota Department of Commerce franchise registrations (CARDS)
+  partner_name: Minnesota Department of Commerce franchise registrations (CARDS)
+  category: state franchise registration (FDD registered with the Minnesota Commissioner of Commerce)
+  type: register
+  channel: regulator-register
+  evidence: https://cards.web.commerce.state.mn.us/franchise-registrations
+  source: edge
+  relationship: standard-participant
+  contract_reference:
+    register: Minnesota Department of Commerce franchise registrations (CARDS)
+    spec_file: null
+    standard: null
+    role: registered-franchisor
+    registrations:
+    - registered_name: CHOICE HOTELS INTERNATIONAL, INC.
+      licences:
+      - registered franchisor (FDD registration order)
+      register_country: US
+      matched_name: choice hotels
+      matched_domain: choicehotels.com
+      matched_by: domain
+      brands:
+      - Cambria Hotels
+      - WOODSPRING SUITES
+      - ECONO LODGE
+      - EVERHOME SUITES
+      - MAINSTAY SUITES
+      - CLARION HOTEL
+      - ASCEND HOTEL COLLECTION
+      - Country Inn & Suites by Radisson
+      - COMFORT INN
+      - Park Inn
+      - Park Inn by Radisson
+      - Park Inn by Radisson Residences
+      - SUBURBAN STUDIOS
+      - SUBURBAN EXTENDED STAY HOTEL
+      - SUBURBAN
+      - RODEWAY INN
+      - SLEEP INN
+      - RADISSON INDIVIDUALS HOTEL
+      - Radisson
+      - QUALITY INN
+      - Radisson Blu
+      - Country Inn & Suites
+      - ASCEND COLLECTION HOTELS
+      file_numbers:
+      - '10698'
+      - '10719'
+      - '10720'
+      - '10721'
+      - '10722'
+      - '1673'
+      - '1799'
+      - '2691'
+      - '3269'
+      - '3576'
+      - '3577'
+      - '48'
+      - '5274'
+      - '5980'
+      - '8459'
+      - '9197'
+      - '9334'
+      latest_order: '2026-06-03'
+      latest_order_type: Order of Renewed Registration w Amendment
+      identity: wikidata Q1075788 'Choice Hotels' P856 http://www.choicehotels.com
+    signal_note: 'participation only: a state franchise registration order; no API conformance is published by this
+      register'
+    detected_by: sweep-franchise-registries.py
+    detected: '2026-10-21'
+    identity_source: wikidata P856 (labelled provenance step; Kin 2026-10-15 decision 1)
+  status: not-a-workflow
+  arazzo: null
